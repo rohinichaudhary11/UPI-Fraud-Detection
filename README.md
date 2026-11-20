@@ -1,10 +1,8 @@
 # UPI Fraud Detection
 
-A full-stack demonstration app that analyzes a UPI-style transaction and estimates its fraud risk using a trained scikit-learn model and balance-based validation rules. The Flask backend serves a responsive browser UI and a JSON prediction endpoint.
+A full-stack application that analyzes a UPI-style transaction and estimates its fraud risk using a trained scikit-learn model and balance-based validation rules. The Flask backend serves a responsive browser UI and a JSON prediction endpoint.
 
-> **Educational demo:** predictions are for learning and demonstration only. They are not financial advice, a bank decision, or a guarantee that a transaction is safe.
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rohinichaudhary11/UPI-Fraud-Detection)
+**Live application:** [Open UPI Fraud Detection](https://upi-fraud-detection-rohini.onrender.com)
 
 ## Features
 
@@ -13,7 +11,6 @@ A full-stack demonstration app that analyzes a UPI-style transaction and estimat
 - Apply balance consistency rules and show the rule that flagged a transaction.
 - Validate missing, negative, malformed, or non-finite transaction data.
 - Use a responsive UI, sample transaction, and health endpoint.
-- Deploy as a Render web service from the included Blueprint.
 
 ## How prediction works
 
@@ -53,17 +50,6 @@ Then open [http://127.0.0.1:5000](http://127.0.0.1:5000). On Windows, `run_local
 ```
 
 The response includes `is_fraud`, `probability`, `rule_flagged`, `rule_reason`, and the derived features. `GET /health` returns service/model readiness.
-
-## Deploy to Render
-
-The repository includes [`render.yaml`](render.yaml), which defines a free Python web service, its project subdirectory, dependency installation, Gunicorn start command, Python 3.11 runtime, and `/health` check.
-
-1. Sign in to Render and choose **New → Blueprint**.
-2. Connect `rohinichaudhary11/UPI-Fraud-Detection` and select the `main` branch.
-3. Review the `upi-fraud-detection-rohini` service and deploy the Blueprint.
-4. Render builds the app and provides its public `onrender.com` URL. Subsequent pushes to `main` trigger deploys.
-
-Render’s free web services spin down after 15 minutes without traffic and may take about a minute to wake on the next request. This plan is suitable for a demo, not production use. [Render free service limitations](https://render.com/docs/free).
 
 ## Project layout
 
