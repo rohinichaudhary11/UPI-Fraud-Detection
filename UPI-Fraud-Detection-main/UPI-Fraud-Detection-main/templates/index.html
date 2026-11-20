@@ -1,176 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UPI Fraud Detection System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8fc">
+  <title>UPI Guard — Transaction intelligence</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      background: #f3f4f6;
-      color: #111827;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 50px auto;
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-
-    h2 {
-      text-align: center;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    label {
-      font-weight: 500;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      background: #2563eb;
-      color: #ffffff;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      background: #1d4ed8;
-    }
-
-    .result-box {
-      margin-top: 25px;
-      padding: 20px;
-      background: #f9fafb;
-      border-radius: 12px;
-      border-left: 5px solid #3b82f6;
-      display: none;
-    }
-
-    .fraud {
-      border-left-color: #dc2626 !important;
-      background: #fef2f2 !important;
-    }
-
-    .safe {
-      border-left-color: #16a34a !important;
-      background: #f0fdf4 !important;
-    }
-
-    .footer {
-      margin-top: 40px;
-      text-align: center;
-      color: #6b7280;
-      font-size: 14px;
-    }
+    :root{--ink:#14231f;--muted:#74817b;--line:#e8ece8;--green:#126c52;--mint:#eaf5ef;--paper:#fff;--bg:#f6f8f6;--red:#b64138;--shadow:0 18px 55px #173b2d0d}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.5}button,input,select{font:inherit}.shell{max-width:1180px;margin:auto;padding:0 38px}.topbar{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;font-weight:750;font-size:16px;letter-spacing:-.4px}.brand-icon{height:34px;width:34px;border-radius:11px;background:var(--green);color:#fff;display:grid;place-items:center}.brand-icon svg{width:19px}.brand small{font-size:11px;color:var(--muted);font-weight:500;display:block;letter-spacing:0}.top-right{display:flex;align-items:center;gap:9px;color:#68766f;font-size:12px}.live-dot{width:7px;height:7px;background:#45a779;border-radius:50%;box-shadow:0 0 0 4px #45a7791c}.avatar{margin-left:12px;border-radius:50%;background:#e6eee8;width:34px;height:34px;display:grid;place-items:center;color:var(--green);font-size:12px;font-weight:700}.main{padding:49px 0 65px}.eyebrow{text-transform:uppercase;letter-spacing:1.5px;color:var(--green);font-size:10px;font-weight:750}.heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:28px}.heading h1{font-size:32px;letter-spacing:-1.3px;margin:7px 0 4px;line-height:1.2}.heading p{color:var(--muted);margin:0;font-size:13px}.model-tag{border:1px solid var(--line);background:#fff;border-radius:30px;padding:8px 12px;display:flex;gap:8px;align-items:center;color:#53635b;font-size:11px}.model-tag svg{width:15px;color:var(--green)}.layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.86fr);gap:20px;align-items:start}.card{background:var(--paper);border:1px solid #e9ede9;border-radius:16px;box-shadow:var(--shadow)}.form-card{padding:26px 28px 24px}.card-title{display:flex;justify-content:space-between;align-items:start;margin-bottom:23px}.card-title h2{font-size:16px;letter-spacing:-.3px;margin:0 0 4px}.card-title p{color:var(--muted);font-size:12px;margin:0}.step{font-size:10px;color:#738078;background:#f4f6f4;padding:6px 9px;border-radius:20px}.sample-button{border:1px solid #dbe6dd;background:#f7faf7;color:var(--green);padding:6px 10px;border-radius:8px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap}.sample-button:hover{background:#edf5ef}.section-label{font-size:10px;color:#77847d;text-transform:uppercase;letter-spacing:1.1px;font-weight:700;margin:23px 0 12px}.section-label:first-child{margin-top:0}.type-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.type-option{position:relative}.type-option input{position:absolute;opacity:0}.type-option label{border:1px solid var(--line);border-radius:10px;min-height:48px;padding:10px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.18s}.type-option label:hover{border-color:#b7cec2}.type-option input:checked+label{border-color:#267859;background:#f2f8f4;box-shadow:inset 0 0 0 1px #267859}.radio-icon{width:26px;height:26px;border-radius:8px;background:#edf3ef;display:grid;place-items:center;color:var(--green)}.radio-icon svg{width:14px}.type-option strong{font-size:12px;display:block}.type-option small{font-size:10px;color:var(--muted);display:block}.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px 14px}.field label{font-size:11px;font-weight:650;color:#45534b;display:flex;justify-content:space-between;margin:0 0 6px}.field label span{font-size:10px;color:#a0aaa4;font-weight:500}.input-wrap{position:relative}.currency{position:absolute;left:12px;top:10px;color:#849088;font-size:12px}.field input{width:100%;height:40px;border:1px solid #e2e8e3;border-radius:8px;padding:0 11px;color:var(--ink);outline:0;background:#fff;transition:.15s}.field input.money{padding-left:27px}.field input:focus{border-color:#4e9b78;box-shadow:0 0 0 3px #4e9b781c}.field input::placeholder{color:#b1b9b4}.hint{font-size:10px;color:#99a39c;margin:5px 0 0}.form-error{display:none;margin-top:15px;color:#a43730;background:#fff3f1;border:1px solid #f2d2ce;padding:10px 12px;border-radius:8px;font-size:12px}.submit{margin-top:23px;width:100%;height:47px;border:0;border-radius:9px;background:var(--green);color:#fff;font-weight:650;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:background .15s,transform .15s}.submit:hover{background:#0c5c44;transform:translateY(-1px)}.submit:disabled{opacity:.7;cursor:wait;transform:none}.submit svg{width:16px}.result{display:none;margin-top:17px;padding:16px;border-radius:11px;border:1px solid}.result.safe{display:block;background:#f1f8f3;border-color:#d6eadc}.result.fraud{display:block;background:#fff5f3;border-color:#f0d6d2}.result-head{display:flex;align-items:center;gap:11px}.result-icon{height:34px;width:34px;border-radius:50%;display:grid;place-items:center;background:#dcefe1;color:#207149;font-weight:800}.fraud .result-icon{background:#f8dfda;color:#ad3d34}.result-head strong{font-size:13px}.result-head small{display:block;color:#728078;font-size:11px}.confidence{margin:14px 0 0;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#65736b}.confidence b{font-size:13px;color:var(--ink)}.meter{height:5px;border-radius:5px;background:#e2e9e4;margin-top:7px;overflow:hidden}.meter span{height:100%;display:block;width:0;background:#31855d;transition:width .35s}.fraud .meter span{background:#bd5448}.reason{margin-top:11px;padding-top:10px;border-top:1px solid #e7e8e3;color:#76524e;font-size:11px}.aside{display:grid;gap:15px}.side-card{padding:21px}.side-title{font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:16px}.side-title svg{width:16px;color:var(--green)}.how-row{display:grid;grid-template-columns:27px 1fr;gap:10px;padding:10px 0;border-top:1px solid #f0f2ef}.how-row:first-of-type{border-top:0;padding-top:0}.num{width:25px;height:25px;border-radius:8px;background:#edf5ef;color:var(--green);display:grid;place-items:center;font-size:10px;font-weight:750}.how-row strong{font-size:11px;display:block;margin:1px 0 3px}.how-row p{font-size:10px;color:var(--muted);margin:0;line-height:1.5}.note{background:#f1f5f1;border-radius:10px;padding:12px;color:#637169;font-size:10px;line-height:1.65}.note b{color:#33463a}.stat-card{padding:18px 20px;display:flex;align-items:center;gap:13px}.stat-icon{width:36px;height:36px;border-radius:10px;background:#e9f3eb;display:grid;place-items:center;color:var(--green)}.stat-icon svg{width:17px}.stat-card strong{font-size:12px;display:block}.stat-card small{color:var(--muted);font-size:10px}.footer{border-top:1px solid var(--line);padding:18px 0 27px;color:#98a29b;font-size:10px;display:flex;justify-content:space-between}.footer span:last-child{color:#748078}
+    @media(max-width:800px){.shell{padding:0 22px}.layout{grid-template-columns:1fr}.aside{grid-template-columns:1fr 1fr}.heading h1{font-size:28px}}
+    @media(max-width:560px){.shell{padding:0 16px}.topbar{height:66px}.top-right>span:not(.live-dot){display:none}.main{padding:35px 0 45px}.heading{align-items:start;gap:14px;flex-direction:column;margin-bottom:20px}.heading h1{font-size:27px}.form-card{padding:21px 17px}.fields{gap:12px 10px}.aside{grid-template-columns:1fr}.footer{gap:10px;flex-direction:column}.model-tag{font-size:10px}}
   </style>
 </head>
 <body>
-
-  <div class="container">
-    <h2>UPI Fraud Detection System</h2>
-
-    <label>Transaction Type</label>
-    <select id="type">
-      <option value="PAYMENT">PAYMENT</option>
-      <option value="TRANSFER">TRANSFER</option>
-    </select>
-
-    <label>Amount</label>
-    <input type="number" id="amount" placeholder="Enter transaction amount" />
-
-    <label>Sender Old Balance</label>
-    <input type="number" id="oldbalanceOrg" placeholder="Old balance (origin)" />
-
-    <label>Sender New Balance</label>
-    <input type="number" id="newbalanceOrig" placeholder="New balance (origin)" />
-
-    <label>Receiver Old Balance</label>
-    <input type="number" id="oldbalanceDest" placeholder="Old balance (destination)" />
-
-    <label>Receiver New Balance</label>
-    <input type="number" id="newbalanceDest" placeholder="New balance (destination)" />
-
-    
-
-    <button onclick="predictFraud()">Check Fraud</button>
-
-    <div id="result" class="result-box"></div>
-  </div>
-
-  <div class="footer">© 2025 Fraud Detection Engine</div>
-
+  <header class="shell topbar">
+    <div class="brand"><div class="brand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div><div>UPI Guard<small>Transaction intelligence</small></div></div>
+    <div class="top-right"><i class="live-dot"></i><span>Detection service ready</span><div class="avatar">UG</div></div>
+  </header>
+  <main class="shell main">
+    <div class="heading"><div><div class="eyebrow">Risk assessment</div><h1>Analyze a transaction</h1><p>Review transaction details to estimate the risk of fraud.</p></div><div class="model-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.64 5.64l2.12 2.12m8.48 8.48 2.12 2.12m0-12.72-2.12 2.12m-8.48 8.48-2.12 2.12"/><circle cx="12" cy="12" r="5"/></svg> ML model + transaction rules</div></div>
+    <div class="layout">
+      <section class="card form-card">
+        <div class="card-title"><div><h2>Transaction details</h2><p>Enter the sender and receiver balance information.</p></div><button class="sample-button" id="sample-button" type="button">Fill sample transaction</button></div>
+        <form id="transaction-form" novalidate>
+          <div class="section-label">Payment method</div>
+          <div class="type-options">
+            <div class="type-option"><input type="radio" name="type" id="payment" value="PAYMENT" checked><label for="payment"><span class="radio-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-14 5h3"/></svg></span><span><strong>Payment</strong><small>Merchant or bill payment</small></span></label></div>
+            <div class="type-option"><input type="radio" name="type" id="transfer" value="TRANSFER"><label for="transfer"><span class="radio-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h15m0 0-4-4m4 4-4 4M20 16H5m0 0 4-4m-4 4 4 4"/></svg></span><span><strong>Transfer</strong><small>Person-to-person transfer</small></span></label></div>
+          </div>
+          <div class="section-label">Transaction amount</div>
+          <div class="fields">
+            <div class="field"><label for="amount">Amount <span>Required</span></label><div class="input-wrap"><span class="currency">₹</span><input class="money" id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></div></div>
+            <div class="field"><label for="oldbalanceOrg">Sender balance before <span>Required</span></label><div class="input-wrap"><span class="currency">₹</span><input class="money" id="oldbalanceOrg" name="oldbalanceOrg" type="number" min="0" step="0.01" placeholder="0.00" required></div></div>
+            <div class="field"><label for="newbalanceOrig">Sender balance after <span>Required</span></label><div class="input-wrap"><span class="currency">₹</span><input class="money" id="newbalanceOrig" name="newbalanceOrig" type="number" min="0" step="0.01" placeholder="0.00" required></div></div>
+            <div class="field"><label for="oldbalanceDest">Receiver balance before <span>Required</span></label><div class="input-wrap"><span class="currency">₹</span><input class="money" id="oldbalanceDest" name="oldbalanceDest" type="number" min="0" step="0.01" placeholder="0.00" required></div></div>
+            <div class="field"><label for="newbalanceDest">Receiver balance after <span>Required</span></label><div class="input-wrap"><span class="currency">₹</span><input class="money" id="newbalanceDest" name="newbalanceDest" type="number" min="0" step="0.01" placeholder="0.00" required></div></div>
+          </div>
+          <div class="form-error" id="form-error" role="alert"></div>
+          <button class="submit" id="submit-button" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.64 5.64l1.42 1.42m9.88 9.88 1.42 1.42m0-12.72-1.42 1.42m-9.88 9.88-1.42 1.42"/><circle cx="12" cy="12" r="5"/></svg><span>Analyze transaction</span></button>
+        </form>
+        <section class="result" id="result" aria-live="polite"><div class="result-head"><span class="result-icon" id="result-icon">✓</span><div><strong id="result-title"></strong><small id="result-subtitle"></small></div></div><div class="confidence"><span>Fraud probability</span><b id="result-probability"></b></div><div class="meter"><span id="result-meter"></span></div><div class="reason" id="result-reason" hidden></div></section>
+      </section>
+      <aside class="aside">
+        <section class="card side-card"><div class="side-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></svg>How analysis works</div><div class="how-row"><span class="num">1</span><div><strong>Balance patterns</strong><p>We compare balance changes with the transaction amount.</p></div></div><div class="how-row"><span class="num">2</span><div><strong>Rule checks</strong><p>Unusual or inconsistent movements are flagged immediately.</p></div></div><div class="how-row"><span class="num">3</span><div><strong>ML prediction</strong><p>The trained model estimates fraud probability from transaction features.</p></div></div></section>
+        <section class="note"><b>For learning and demonstration.</b> This estimate uses the bundled model and transaction rules. It is not a bank decision or a guarantee that a transaction is safe.</section>
+        <section class="card stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div><div><strong>Protected analysis</strong><small>Transaction data is processed for this prediction.</small></div></section>
+      </aside>
+    </div>
+  </main>
+  <footer class="shell footer"><span>UPI Guard · Fraud detection demo</span><span>Powered by machine learning</span></footer>
   <script>
-    async function predictFraud() {
-      const payload = {
-        type: document.getElementById("type").value,
-        amount: document.getElementById("amount").value,
-        oldbalanceOrg: document.getElementById("oldbalanceOrg").value,
-        newbalanceOrig: document.getElementById("newbalanceOrig").value,
-        oldbalanceDest: document.getElementById("oldbalanceDest").value,
-        newbalanceDest: document.getElementById("newbalanceDest").value,
-        
-      };
+    const form = document.getElementById('transaction-form');
+    const errorBox = document.getElementById('form-error');
+    const button = document.getElementById('submit-button');
+    const result = document.getElementById('result');
+    const sampleButton = document.getElementById('sample-button');
+    const ids = ['amount', 'oldbalanceOrg', 'newbalanceOrig', 'oldbalanceDest', 'newbalanceDest'];
 
-      const resultBox = document.getElementById("result");
-      resultBox.style.display = "none";
+    sampleButton.addEventListener('click', () => {
+      document.getElementById('transfer').checked = true;
+      [100, 500, 400, 200, 300].forEach((value, index) => {
+        document.getElementById(ids[index]).value = value;
+      });
+      errorBox.style.display = 'none';
+      result.style.display = 'none';
+    });
 
-      try {
-        const res = await fetch("http://localhost:5000/predict", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-
-        if (data.error) {
-          resultBox.className = "result-box";
-          resultBox.style.display = "block";
-          resultBox.innerHTML = `<strong>Error:</strong> ${data.error}`;
-          return;
-        }
-
-        const status = data.is_fraud === 1 ? "⚠️ FRAUD DETECTED" : "🟢 SAFE TRANSACTION";
-        const prob = (data.probability * 100).toFixed(2);
-
-        resultBox.style.display = "block";
-        resultBox.className = data.is_fraud === 1 ? "result-box fraud" : "result-box safe";
-
-        resultBox.innerHTML = `
-          <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">${status}</div>
-          <div><strong>Fraud Probability:</strong> ${prob}%</div>
-        `;
-
-      } catch (err) {
-        resultBox.style.display = "block";
-        resultBox.className = "result-box";
-        resultBox.innerHTML = `<strong>Error:</strong> ${err.message}`;
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      errorBox.style.display = 'none';
+      result.style.display = 'none';
+      if (!form.checkValidity()) {
+        errorBox.textContent = 'Enter a transaction amount and all four balance values to run the analysis.';
+        errorBox.style.display = 'block';
+        form.querySelector(':invalid')?.focus();
+        return;
       }
-    }
+      const values = Object.fromEntries(ids.map(id => [id, Number(document.getElementById(id).value)]));
+      if (Object.values(values).some(value => !Number.isFinite(value) || value < 0)) {
+        errorBox.textContent = 'Enter valid, non-negative amounts for each field.';
+        errorBox.style.display = 'block'; return;
+      }
+      if (values.amount <= 0) {
+        errorBox.textContent = 'Transaction amount must be greater than zero.';
+        errorBox.style.display = 'block'; return;
+      }
+      const selectedType = document.querySelector('input[name="type"]:checked');
+      if (!selectedType) {
+        errorBox.textContent = 'Select a payment method to continue.';
+        errorBox.style.display = 'block';
+        return;
+      }
+      const payload = { type: selectedType.value, ...values };
+      button.disabled = true;
+      button.querySelector('span').textContent = 'Analyzing…';
+      try {
+        const response = await fetch('{{ url_for("predict") }}', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await response.json();
+        if (!response.ok || data.error) throw new Error(data.error || 'The prediction service could not process this transaction.');
+        const fraud = Number(data.is_fraud) === 1;
+        result.className = `result ${fraud ? 'fraud' : 'safe'}`;
+        result.style.display = 'block';
+        document.getElementById('result-icon').textContent = fraud ? '!' : '✓';
+        document.getElementById('result-title').textContent = fraud ? 'Potential fraud detected' : 'No fraud detected';
+        document.getElementById('result-subtitle').textContent = data.rule_flagged ? 'Flagged by a transaction rule' : 'Assessed by the machine learning model';
+        const probability = Math.max(0, Math.min(1, Number(data.probability) || 0));
+        document.getElementById('result-probability').textContent = `${(probability * 100).toFixed(2)}%`;
+        document.getElementById('result-meter').style.width = `${probability * 100}%`;
+        const reason = document.getElementById('result-reason');
+        reason.hidden = !data.rule_reason;
+        reason.textContent = data.rule_reason ? `Reason: ${data.rule_reason}` : '';
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (error) {
+        errorBox.textContent = error.message;
+        errorBox.style.display = 'block';
+      } finally {
+        button.disabled = false;
+        button.querySelector('span').textContent = 'Analyze transaction';
+      }
+    });
   </script>
 </body>
 </html>

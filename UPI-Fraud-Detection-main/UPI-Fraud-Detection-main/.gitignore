@@ -1,0 +1,5 @@
+.runtime-packages/
+.venv/
+.python311/
+__pycache__/
+*.py[cod]

@@ -1,28 +1,56 @@
 # app.py
+from pathlib import Path
+from math import isfinite
+from threading import Timer
+import webbrowser
+
 from flask import Flask, request, jsonify, render_template
 import joblib
-import numpy as np
+import pandas as pd
 from datetime import datetime
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+PROJECT_DIR = Path(__file__).resolve().parent
 
 # Load ML pipeline
-pipe = joblib.load("./model/fraud_pipeline.pkl")
+pipe = joblib.load(PROJECT_DIR / "model" / "fraud_pipeline.pkl")
 
 
 # ---------------------------------------------------------
 # Feature computation
 # ---------------------------------------------------------
 def compute_features_and_values(payload: dict):
+    if not isinstance(payload, dict):
+        raise ValueError("Send transaction details as a JSON object.")
 
-    tx_type = payload.get("type", "PAYMENT").upper()
-    amount = float(payload.get("amount", 0.0))
-    oldbalanceOrg = float(payload.get("oldbalanceOrg", 0.0))
-    newbalanceOrig = float(payload.get("newbalanceOrig", 0.0))
-    oldbalanceDest = float(payload.get("oldbalanceDest", 0.0))
-    newbalanceDest = float(payload.get("newbalanceDest", 0.0))
+    tx_type = str(payload.get("type", "")).upper()
+    if tx_type not in {"PAYMENT", "TRANSFER"}:
+        raise ValueError("Transaction type must be PAYMENT or TRANSFER.")
+
+    required_fields = (
+        "amount",
+        "oldbalanceOrg",
+        "newbalanceOrig",
+        "oldbalanceDest",
+        "newbalanceDest",
+    )
+    missing_fields = [field for field in required_fields if field not in payload]
+    if missing_fields:
+        raise ValueError("Missing required transaction fields: " + ", ".join(missing_fields))
+
+    try:
+        amount, oldbalanceOrg, newbalanceOrig, oldbalanceDest, newbalanceDest = (
+            float(payload[field]) for field in required_fields
+        )
+    except (TypeError, ValueError):
+        raise ValueError("Transaction amounts and balances must be valid numbers.") from None
+
+    if not all(isfinite(value) for value in (amount, oldbalanceOrg, newbalanceOrig, oldbalanceDest, newbalanceDest)):
+        raise ValueError("Transaction amounts and balances must be finite numbers.")
+    if amount <= 0:
+        raise ValueError("Transaction amount must be greater than zero.")
+    if min(oldbalanceOrg, newbalanceOrig, oldbalanceDest, newbalanceDest) < 0:
+        raise ValueError("Balances cannot be negative.")
 
     # Using server time
     hour = datetime.now().hour
@@ -69,7 +97,7 @@ def compute_features_and_values(payload: dict):
         "type_TRANSFER": type_TRANSFER
     }
 
-    X = np.array(features).reshape(1, -1)
+    X = pd.DataFrame([features], columns=pipe.feature_names_in_)
     return X, vals
 
 
@@ -140,7 +168,9 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        payload = request.get_json(force=True)
+        payload = request.get_json(silent=True)
+        if payload is None:
+            raise ValueError("Send transaction details as a JSON object.")
 
         X, vals = compute_features_and_values(payload)
 
@@ -176,4 +206,5 @@ def predict():
 # Start Server
 # ---------------------------------------------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    Timer(1.0, lambda: webbrowser.open("http://127.0.0.1:5000")).start()
+    app.run(host="127.0.0.1", port=5000, debug=False)
