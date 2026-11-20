@@ -1,6 +1,7 @@
 # app.py
 from pathlib import Path
 from math import isfinite
+import os
 from threading import Timer
 import webbrowser
 
@@ -165,6 +166,11 @@ def home():
     return render_template('index.html')
 
 
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok", "model_loaded": pipe is not None})
+
+
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
@@ -206,5 +212,6 @@ def predict():
 # Start Server
 # ---------------------------------------------------------
 if __name__ == "__main__":
-    Timer(1.0, lambda: webbrowser.open("http://127.0.0.1:5000")).start()
+    if os.environ.get("OPEN_BROWSER") == "1":
+        Timer(1.0, lambda: webbrowser.open("http://127.0.0.1:5000")).start()
     app.run(host="127.0.0.1", port=5000, debug=False)
