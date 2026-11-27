@@ -3,8 +3,8 @@
 # 💳 UPI Fraud Detection
 ### ML-powered transaction screening for faster, clearer fraud-risk assessment.
 
-[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/) [![Flask 2.2](https://img.shields.io/badge/Flask-2.2.5-000000?style=flat-square&logo=flask&logoColor=white)](https://flask.palletsprojects.com/) [![scikit--learn 1.2](https://img.shields.io/badge/scikit--learn-1.2.2-F7931E?style=flat-square&logo=scikit-learn&logoColor=111111)](https://scikit-learn.org/)
-[![Pandas 2.2](https://img.shields.io/badge/Pandas-2.2.3-150458?style=flat-square&logo=pandas&logoColor=white)](https://pandas.pydata.org/) [![NumPy 1.26](https://img.shields.io/badge/NumPy-1.26.4-013243?style=flat-square&logo=numpy&logoColor=white)](https://numpy.org/) [![Render](https://img.shields.io/badge/Render-46E3B7?style=flat-square&logo=render&logoColor=111111)](https://render.com/)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/) [![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white)](https://flask.palletsprojects.com/) [![scikit--learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=111111)](https://scikit-learn.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white)](https://pandas.pydata.org/) [![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white)](https://numpy.org/) [![Render](https://img.shields.io/badge/Render-46E3B7?style=flat-square&logo=render&logoColor=111111)](https://render.com/)
 
 UPI Fraud Detection analyzes transaction details with a trained scikit-learn pipeline and balance-validation rules to estimate fraud risk through a simple browser interface and JSON API.
 
